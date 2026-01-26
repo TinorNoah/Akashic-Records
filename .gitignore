@@ -1,4 +1,30 @@
+# General
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Project Specific
+*.log
+*.tmp
+temp/
+tmp/
+*.bak
+
+# Reports & Exports
 system_report_*.txt
 system_info_*.json
-*.log
-.DS_Store
+
+# Backups created by the tool
+.zsh_backup/
+
+# Editor config (optional)
+.vscode/
+.idea/
+
+# Go artifacts (if main.go is kept/compiled)
+*.exe
+*.test
+*.out
+main
