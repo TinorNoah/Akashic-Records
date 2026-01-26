@@ -19,6 +19,10 @@ system_info_*.json
 # Backups created by the tool
 .zsh_backup/
 
+# Python artifacts
+__pycache__/
+*.py[cod]
+
 # Editor config (optional)
 .vscode/
 .idea/
