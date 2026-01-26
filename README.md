@@ -1,67 +1,102 @@
-# Akashic Records
+# 👁️‍🗨️ Akashic Records
 
-> The Ultimate System Omniscience Tool.
+> **"The Ultimate System Omniscience Tool."**
 
-**Akashic Records** (formerly System Info Extractor) is a comprehensive system information and configuration utility for Linux. It provides detailed system reports, monitors resources, and helps you set up a robust shell environment with ZSH, Starship, and essential plugins.
+![Bash](https://img.shields.io/badge/Language-Bash-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+![Maintenance](https://img.shields.io/badge/Maintenance-Active-green?style=for-the-badge)
 
-This script provides an interactive menu to view various system details:
+---
 
-1.  **System Overview**: Hostname, uptime, OS info, kernel version, architecture, and logged-in users.
-2.  **CPU & Memory**: CPU model, cores, frequency, memory usage, and top memory-consuming processes.
-3.  **Storage & Filesystems**: Block devices, disk usage, and mounted filesystems.
-4.  **Hardware Devices**: PCI and USB devices, input devices.
-5.  **Network Information**: IP addresses, routing table, DNS config, listening ports, and Network Manager status.
-6.  **Low-Level / Kernel Info**: Loaded modules, interrupts, and boot parameters.
-7.  **Container Information**: Status of Docker and Podman containers.
-8.  **Failed System Services**: List of failed systemd units.
-9.  **Package Updates**: Check for available updates (supports dnf, apt, pacman).
-10. **Generate Full Report**: Save all information to a text file.
-11. **Export to JSON**: Export key metrics to a JSON file for programmatic use.
-12. **Live Dashboard (TUI)**: A real-time, visual dashboard with CPU/RAM/Disk bars and network stats.
-13. **Tech Glossary**: A built-in cheat sheet explaining common terms (GiB vs GB, x64, PID, etc.).
+**Akashic Records** serves as the central repository for your system's knowledge. It is a powerful, interactive utility designed to extract deep insights from your Linux environment, monitor vital statistics in real-time, and forge a robust, productive shell experience.
 
-## Visual & Usability Improvements
--   **Dynamic Colors**: Dashboard bars change color (Green/Yellow/Red) based on usage.
--   **Readable Processes**: Process lists are formatted with aligned columns and a clear legend.
--   **Zero Dependencies**: All new features run on standard Bash.
+Whether you need a quick system audit, a live performance dashboard, or a fully configured ZSH environment, Akashic Records has the answer.
 
-## Pure Bash TUI Dashboard (New!)
-We now offer a modern, visual Terminal User Interface (TUI) built entirely in **Bash**. No dependencies required!
+---
+
+## 🔮 Capabilities
+
+### 🧠 **System Omniscience (Information)**
+Gain instant access to every detail of your machine:
+*   **Core Intel**: Kernel version, architecture, uptime, and OS distribution.
+*   **Hardware Sight**: Deep dive into CPU models, PCI/USB devices, and memory topology.
+*   **Network Awareness**: IP routing, DNS configurations, and active listening ports.
+*   **Container Status**: Real-time status of Docker and Podman instances.
+*   **Service Health**: Instantly identify failed systemd units.
+
+### ⚡ **Live Vitality (Dashboard)**
+Launch a stunning, dependency-free **Terminal User Interface (TUI)** dashboard.
+*   **Real-time Monitoring**: Visual bars for CPU, RAM, Swap, and Disk usage.
+*   **Network Flow**: Live RX/TX data transfer rates.
+*   **Battery Status**: Color-coded power monitoring.
+*   **Top Processes**: Identify resource hogs instantly.
+
+### 🛠️ **Environment Forge (Setup)**
+Transform your terminal into a productivity powerhouse.
+*   **Interactive Installer**: A guided wizard to set up **ZSH**.
+*   **Starship Integration**: Automatically installs and configures the Starship prompt.
+*   **Plugin Management**:
+    *   `zsh-autosuggestions` (Type faster)
+    *   `zsh-syntax-highlighting` (Catch errors early)
+    *   `zsh-autocomplete` (Navigate like a pro)
+*   **Safe & Reversible**: Includes dry-run modes, backups, and fail-safe logic.
+
+---
+
+## 🚀 Initialization
+
+### Prerequisites
+*   A Linux environment (Debian, Fedora, or Arch based).
+*   `bash` (v4.0+ recommended).
+*   `curl` and `git` (for installation).
+
+### Installation
+
+Clone the archives to your local machine:
+
+```bash
+git clone https://github.com/TinorNoah/akashic-records.git
+cd akashic-records
+chmod +x akashic_records.sh dashboard.sh
+```
 
 ### Usage
-1.  Run the main script: `./akashic_records.sh`
-2.  Select option **12**.
-3.  Or run directly: `./dashboard.sh`
 
-## Features
--   **Real-time Graphs**: Visual bars for CPU, RAM, and Disk usage.
--   **Zero Dependencies**: Works on any standard Linux system with Bash.
--   **Fast**: Instant startup and low resource usage.
+**Invoke the Main Utility:**
+```bash
+./akashic_records.sh
+```
 
-## Installation
+**Launch Vitality Dashboard Only:**
+```bash
+./dashboard.sh
+```
 
-1.  **Download the script**:
-    ```bash
-    git clone https://github.com/TinorNoah/system-info-extractor.git
-    cd system-info-extractor
-    ```
+---
 
-2.  **Make it executable**:
-    ```bash
-    chmod +x akashic_records.sh dashboard.sh
-    ```
+## ⚙️ Configuration
 
-3.  **Run the script**:
-    ```bash
-    ./akashic_records.sh
-    ```
+Akashic Records respects your existing configuration while offering powerful new defaults.
 
-## Requirements
+*   **Block-Based Config**: modifications to `.zshrc` are wrapped in clear start/end blocks (`# >>> plugin:name >>>`).
+*   **Idempotent**: Run the setup as many times as you like; it won't duplicate configurations.
+*   **Uninstallation**: Simply remove the marked blocks from your `.zshrc`.
 
--   Bash
--   Standard Linux utilities: `grep`, `sed`, `awk`, `cut`, `head`, `column`
--   System tools (optional but recommended): `lscpu`, `lsblk`, `lspci`, `lsusb`, `ip`, `ss`, `nmcli`, `docker`, `podman`, `systemctl`
+---
 
-## License
+## 🖼️ Gallery
 
-MIT License
+> *Visualize the interface here*
+
+| Main Menu | Dashboard | Setup Wizard |
+| :---: | :---: | :---: |
+| *(Image Placeholder)* | *(Image Placeholder)* | *(Image Placeholder)* |
+
+---
+
+## 📜 License
+
+This project is open-source and available under the [MIT License](LICENSE).
+
+> *"Knowledge is power. Absolute knowledge is Akashic."*
