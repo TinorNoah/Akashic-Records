@@ -148,7 +148,7 @@ get_battery_info() {
 while true; do
     # Header
     tput cup 0 0
-    echo "${BOLD}${WHITE}${BLUE}  SYSTEM DASHBOARD  ${RESET}"
+    echo "${BOLD}${WHITE}${BLUE} AKASHIC RECORDS DASHBOARD ${RESET}"
     echo "${CYAN}Hostname:${RESET} $(hostname) ${DIM}|${RESET} ${CYAN}OS:${RESET} $(uname -o) ${DIM}|${RESET} ${CYAN}Kernel:${RESET} $(uname -r)"
     echo "${CYAN}Uptime:${RESET}   $(uptime -p)"
     echo "${CYAN}Clock:${RESET}    $(date +'%H:%M:%S') ${DIM}|${RESET} ${CYAN}Load Avg:${RESET} $(get_load_avg)"

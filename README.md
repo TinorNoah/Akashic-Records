@@ -1,8 +1,8 @@
-# System Info Extractor
+# Akashic Records
 
-A comprehensive, interactive Bash script to gather and display system information on Linux.
+> The Ultimate System Omniscience Tool.
 
-## Features
+**Akashic Records** (formerly System Info Extractor) is a comprehensive system information and configuration utility for Linux. It provides detailed system reports, monitors resources, and helps you set up a robust shell environment with ZSH, Starship, and essential plugins.
 
 This script provides an interactive menu to view various system details:
 
@@ -29,7 +29,7 @@ This script provides an interactive menu to view various system details:
 We now offer a modern, visual Terminal User Interface (TUI) built entirely in **Bash**. No dependencies required!
 
 ### Usage
-1.  Run the main script: `./gather_sys_info.sh`
+1.  Run the main script: `./akashic_records.sh`
 2.  Select option **12**.
 3.  Or run directly: `./dashboard.sh`
 
@@ -48,12 +48,12 @@ We now offer a modern, visual Terminal User Interface (TUI) built entirely in **
 
 2.  **Make it executable**:
     ```bash
-    chmod +x gather_sys_info.sh dashboard.sh
+    chmod +x akashic_records.sh dashboard.sh
     ```
 
 3.  **Run the script**:
     ```bash
-    ./gather_sys_info.sh
+    ./akashic_records.sh
     ```
 
 ## Requirements

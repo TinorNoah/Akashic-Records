@@ -10,7 +10,7 @@ NC='\033[0m' # No Color
 print_header() {
     clear
     echo -e "${BLUE}${BOLD}=================================================${NC}"
-    echo -e "${BLUE}${BOLD}      Interactive System Information Tool        ${NC}"
+    echo -e "${BLUE}${BOLD}        AKASHIC RECORDS (System Utility)         ${NC}"
     echo -e "${BLUE}${BOLD}=================================================${NC}"
     echo ""
 }
@@ -860,7 +860,7 @@ interactive_menu() {
     while true; do
         clear
         echo -e "${BLUE}${BOLD}=================================================${NC}"
-        echo -e "${BLUE}${BOLD}      Interactive System Information Tool        ${NC}"
+        echo -e "${BLUE}${BOLD}        AKASHIC RECORDS (System Utility)         ${NC}"
         echo -e "${BLUE}${BOLD}=================================================${NC}"
         echo ""
         echo -e "${YELLOW}${BOLD}:: $title ::${NC}"
