@@ -42,7 +42,7 @@ We now offer a modern, visual Terminal User Interface (TUI) built entirely in **
 
 1.  **Download the script**:
     ```bash
-    git clone https://github.com/YOUR_USERNAME/system-info-extractor.git
+    git clone https://github.com/TinorNoah/system-info-extractor.git
     cd system-info-extractor
     ```
 
