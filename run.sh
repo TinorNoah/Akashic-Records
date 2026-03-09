@@ -34,4 +34,9 @@ chmod +x "$INSTALL_DIR/akashic_records.sh"
 # Run the utility
 echo -e "\033[0;32m[SUCCESS]\033[0m Launching Akashic Records..."
 cd "$INSTALL_DIR"
+
+if [ ! -t 0 ] && [ -c /dev/tty ]; then
+    exec < /dev/tty
+fi
+
 exec ./akashic_records.sh
