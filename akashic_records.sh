@@ -861,7 +861,7 @@ interactive_menu() {
     local title="$1"
     local reference_name="$2"
     
-    # Bash 3.2+ compatibility using eval instead of local -n
+    # Bash/Zsh cross-compatibility using eval instead of local -n
     local length
     eval "length=\${#${reference_name}[@]}"
     local selected=0
@@ -898,9 +898,9 @@ interactive_menu() {
         
         if [[ "$input" == $'\x1b' ]]; then
             if [[ -n "$ZSH_VERSION" ]]; then
-                read -rs -k 2 input
+                read -rs -k 2 -t 0.1 input || true
             else
-                read -rsn2 input
+                read -rsn2 -t 0.1 input || true
             fi
             if [[ "$input" == "[A" ]]; then # Up
                 ((selected--))
