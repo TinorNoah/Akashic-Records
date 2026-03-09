@@ -30,7 +30,8 @@ print_header() {
 
 pause() {
     echo ""
-    read -p "Press [Enter] key to continue..."
+    echo -en "Press [Enter] key to continue..."
+    read -r
     echo ""
 }
 
@@ -310,11 +311,11 @@ start_dashboard() {
     while true; do
         # Header
         tput cup 0 0
-        echo "${BOLD}${WHITE}${BLUE} AKASHIC RECORDS DASHBOARD ${RESET}"
-        echo "${CYAN}Hostname:${RESET} $(hostname) ${DIM}|${RESET} ${CYAN}OS:${RESET} ${SYS_DISTRO:-Linux} ${DIM}|${RESET} ${CYAN}Kernel:${RESET} $(uname -r)"
-        echo "${CYAN}Uptime:${RESET}   $(uptime -p)"
-        echo "${CYAN}Clock:${RESET}    $(date +'%H:%M:%S') ${DIM}|${RESET} ${CYAN}Load Avg:${RESET} $(get_load_avg)"
-        echo "${DIM}------------------------------------------------------------${RESET}"
+        echo -e "${BOLD}${WHITE}${BLUE} AKASHIC RECORDS DASHBOARD ${RESET}"
+        echo -e "${CYAN}Hostname:${RESET} $(hostname) ${DIM}|${RESET} ${CYAN}OS:${RESET} ${SYS_DISTRO:-Linux} ${DIM}|${RESET} ${CYAN}Kernel:${RESET} $(uname -r)"
+        echo -e "${CYAN}Uptime:${RESET}   $(uptime -p)"
+        echo -e "${CYAN}Clock:${RESET}    $(date +'%H:%M:%S') ${DIM}|${RESET} ${CYAN}Load Avg:${RESET} $(get_load_avg)"
+        echo -e "${DIM}------------------------------------------------------------${RESET}"
     
         # CPU
         local cpu_usage
@@ -349,7 +350,7 @@ start_dashboard() {
         read -r rx_kb tx_kb <<< "$(get_net_usage)"
         tput cup 14 0
         printf "%-12s" "${BOLD}Network:${RESET}"
-        echo -n "RX: ${GREEN}${rx_kb} KB/s${RESET} ${DIM}|${RESET} TX: ${RED}${tx_kb} KB/s${RESET}      "
+        echo -en "RX: ${GREEN}${rx_kb} KB/s${RESET} ${DIM}|${RESET} TX: ${RED}${tx_kb} KB/s${RESET}      "
     
         # Battery
         local bat_cap
@@ -357,39 +358,44 @@ start_dashboard() {
         tput cup 16 0
         printf "%-12s" "${BOLD}Battery:${RESET}"
         if [ "$bat_cap" == "N/A" ]; then
-            echo -n "${DIM}N/A${RESET}"
+            echo -en "${DIM}N/A${RESET}"
         else
             if [ "$bat_cap" -gt 60 ]; then
-                 echo -n "${GREEN}${bat_cap}%${RESET}"
+                 echo -en "${GREEN}${bat_cap}%${RESET}"
             elif [ "$bat_cap" -gt 20 ]; then
-                 echo -n "${YELLOW}${bat_cap}%${RESET}"
+                 echo -en "${YELLOW}${bat_cap}%${RESET}"
             else
-                 echo -n "${RED}${BOLD}${bat_cap}%${RESET}"
+                 echo -en "${RED}${BOLD}${bat_cap}%${RESET}"
             fi
         fi
     
         # Top Processes
         tput cup 18 0
-        echo "${BOLD}Top Processes (CPU/MEM):${RESET}"
+        echo -e "${BOLD}Top Processes (CPU/MEM):${RESET}"
         tput cup 19 0
         # get_top_processes returns multiple lines.
         # We need to print them carefully.
         local row=19
         get_top_processes | while read -r line; do
              tput cup $row 2
-             echo "${MAGENTA}${line}${RESET}"
+             echo -e "${MAGENTA}${line}${RESET}"
              ((row++))
         done
     
         # Footer
         tput cup 25 0
-        echo "${DIM}------------------------------------------------------------${RESET}"
-        echo "Press ${BOLD}${RED}q${RESET} to quit."
+        echo -e "${DIM}------------------------------------------------------------${RESET}"
+        echo -e "Press ${BOLD}${RED}q${RESET} to quit."
     
         # Input handling (Non-blocking read with timeout 0.1s)
         # Since get_cpu_usage already slept 0.1s, we can just do a very short check.
         local key
-        read -t 0.1 -n 1 key || true
+        if [[ -n "$ZSH_VERSION" ]]; then
+            read -t 0.1 -k 1 key || true
+        else
+            read -t 0.1 -n 1 key || true
+        fi
+        
         if [[ "${key:-}" == "q" ]]; then
             dashboard_cleanup
             break
@@ -408,9 +414,9 @@ interactive_menu() {
     local title="$1"
     local reference_name="$2"
     
-    # Bash 4.3+ supports 'local -n'. For older bash, we might need eval.
-    # Assuming modern environment given the context.
-    local -n opts=$reference_name
+    # Bash 3.2+ compatibility using eval instead of local -n
+    local length
+    eval "length=\${#${reference_name}[@]}"
     local selected=0
     
     # Internal loop for this specific menu
@@ -421,28 +427,46 @@ interactive_menu() {
         echo -e "${BLUE}${BOLD}=================================================${NC}"
         echo ""
         echo -e "${YELLOW}${BOLD}:: $title ::${NC}"
-        echo "Use ${BOLD}Up/Down${NC} to navigate, ${BOLD}Enter${NC} to select."
+        echo -e "Use ${BOLD}Up/Down${NC} to navigate, ${BOLD}Enter${NC} to select."
         echo ""
 
-        for i in "${!opts[@]}"; do
+        local start_idx=0
+        if [[ -n "$ZSH_VERSION" ]]; then
+            start_idx=1
+        fi
+
+        for ((i=0; i<length; i++)); do
+            local array_idx=$((i + start_idx))
+            local item
+            eval "item=\"\${${reference_name}[$array_idx]}\""
             if [[ "$i" == "$selected" ]]; then
-                echo -e "${GREEN}${BOLD}> ${opts[$i]} <${NC}"
+                echo -e "${GREEN}${BOLD}> ${item} <${NC}"
             else
-                echo -e "  ${opts[$i]}"
+                echo -e "  ${item}"
             fi
         done
         echo ""
 
         # Input handling
-        read -rsn1 input
+        local input
+        if [[ -n "$ZSH_VERSION" ]]; then
+            read -rs -k 1 input
+        else
+            read -rsn1 input
+        fi
+        
         if [[ "$input" == $'\x1b' ]]; then
-            read -rsn2 -t 0.1 input
+            if [[ -n "$ZSH_VERSION" ]]; then
+                read -rs -k 2 input
+            else
+                read -rsn2 input
+            fi
             if [[ "$input" == "[A" ]]; then # Up
                 ((selected--))
-                if ((selected < 0)); then selected=$((${#opts[@]} - 1)); fi
+                if ((selected < 0)); then selected=$((length - 1)); fi
             elif [[ "$input" == "[B" ]]; then # Down
                 ((selected++))
-                if ((selected >= ${#opts[@]})); then selected=0; fi
+                if ((selected >= length)); then selected=0; fi
             fi
         elif [[ "$input" == "" ]]; then # Enter
             MENU_SELECTED_INDEX=$selected

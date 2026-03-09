@@ -117,7 +117,8 @@ check_sudo() {
     fi
 
     echo -e "${YELLOW}The script will attempt to re-execute itself with sudo.${NC}"
-    read -p "Do you want to proceed? (Y/n): " confirm
+    echo -en "Do you want to proceed? (Y/n): "
+    read -r confirm
     if [[ -n "$confirm" && ! "$confirm" =~ ^[Yy]$ ]]; then
         log_error "Operation aborted by user."
         return 1

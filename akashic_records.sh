@@ -17,7 +17,8 @@ print_header() {
 # Pause function
 pause() {
     echo ""
-    read -p "Press [Enter] key to continue..."
+    echo -en "Press [Enter] key to continue..."
+    read -r
 }
 
 # Global Flags
@@ -83,7 +84,8 @@ check_sudo() {
     fi
 
     echo -e "${YELLOW}The script will attempt to re-execute itself with sudo.${NC}"
-    read -p "Do you want to proceed? (Y/n): " confirm
+    echo -en "Do you want to proceed? (Y/n): "
+    read -r confirm
     if [[ -n "$confirm" && ! "$confirm" =~ ^[Yy]$ ]]; then
         log_error "Operation aborted by user."
         return 1
@@ -581,9 +583,11 @@ install_zsh_environment() {
         # Prompt
         # Default behavior: If installed, verify config. If not, ask to install.
         if [[ "$is_present" -eq 1 ]]; then
-             read -p "$(echo -e "  [${GREEN}x${NC}] $desc is already installed. Enable/Update in .zshrc? (Y/n): ")" choice
+             echo -en "  [${GREEN}x${NC}] $desc is already installed. Enable/Update in .zshrc? (Y/n): "
+             read -r choice
         else
-             read -p "$(echo -e "  [ ] Install $desc? (Y/n): ")" choice
+             echo -en "  [ ] Install $desc? (Y/n): "
+             read -r choice
         fi
         
         if [[ -z "$choice" ]]; then
@@ -637,7 +641,8 @@ install_zsh_environment() {
 
     
     echo ""
-    read -p "Proceed with changes? (Y/n): " confirm
+    echo -en "Proceed with changes? (Y/n): "
+    read -r confirm
     if [[ -n "$confirm" && ! "$confirm" =~ ^[Yy]$ ]]; then
         log_warn "Installation cancelled."
         return
@@ -780,7 +785,8 @@ install_zsh_environment() {
     log_info "Installation complete!"
     
     if [[ "$IS_DRY_RUN" -ne 1 ]]; then
-        read -p "Start Zsh now? (Replaces current shell) (Y/n): " start_zsh
+        echo -en "Start Zsh now? (Replaces current shell) (Y/n): "
+        read -r start_zsh
         if [[ -z "$start_zsh" || "$start_zsh" =~ ^[Yy]$ ]]; then
             log_info "Starting Zsh..."
             # If we are root (sudo), switch to user before exec
@@ -853,7 +859,11 @@ generate_report() {
 # Returns: selected index in global variable 'MENU_SELECTED_INDEX'
 interactive_menu() {
     local title="$1"
-    local -n opts=$2
+    local reference_name="$2"
+    
+    # Bash 3.2+ compatibility using eval instead of local -n
+    local length
+    eval "length=\${#${reference_name}[@]}"
     local selected=0
     
     # Internal loop for this specific menu
@@ -864,28 +874,40 @@ interactive_menu() {
         echo -e "${BLUE}${BOLD}=================================================${NC}"
         echo ""
         echo -e "${YELLOW}${BOLD}:: $title ::${NC}"
-        echo "Use ${BOLD}Up/Down${NC} to navigate, ${BOLD}Enter${NC} to select."
+        echo -e "Use ${BOLD}Up/Down${NC} to navigate, ${BOLD}Enter${NC} to select."
         echo ""
 
-        for i in "${!opts[@]}"; do
+        for ((i=0; i<length; i++)); do
+            local item
+            eval "item=\"\${${reference_name}[$i]}\""
             if [[ "$i" == "$selected" ]]; then
-                echo -e "${GREEN}${BOLD}> ${opts[$i]} <${NC}"
+                echo -e "${GREEN}${BOLD}> ${item} <${NC}"
             else
-                echo -e "  ${opts[$i]}"
+                echo -e "  ${item}"
             fi
         done
         echo ""
 
         # Input handling
-        read -rsn1 input
+        local input
+        if [[ -n "$ZSH_VERSION" ]]; then
+            read -rs -k 1 input
+        else
+            read -rsn1 input
+        fi
+        
         if [[ "$input" == $'\x1b' ]]; then
-            read -rsn2 -t 0.1 input
+            if [[ -n "$ZSH_VERSION" ]]; then
+                read -rs -k 2 input
+            else
+                read -rsn2 input
+            fi
             if [[ "$input" == "[A" ]]; then # Up
                 ((selected--))
-                if ((selected < 0)); then selected=$((${#opts[@]} - 1)); fi
+                if ((selected < 0)); then selected=$((length - 1)); fi
             elif [[ "$input" == "[B" ]]; then # Down
                 ((selected++))
-                if ((selected >= ${#opts[@]})); then selected=0; fi
+                if ((selected >= length)); then selected=0; fi
             fi
         elif [[ "$input" == "" ]]; then # Enter
             MENU_SELECTED_INDEX=$selected

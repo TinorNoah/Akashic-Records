@@ -35,11 +35,11 @@ trap cleanup SIGINT SIGTERM
 get_color() {
     local percent=$1
     if (( $(echo "$percent >= 80" | bc -l) )); then
-        echo "$RED"
+        echo -e "$RED"
     elif (( $(echo "$percent >= 50" | bc -l) )); then
-        echo "$YELLOW"
+        echo -e "$YELLOW"
     else
-        echo "$GREEN"
+        echo -e "$GREEN"
     fi
 }
 
@@ -148,11 +148,11 @@ get_battery_info() {
 while true; do
     # Header
     tput cup 0 0
-    echo "${BOLD}${WHITE}${BLUE} AKASHIC RECORDS DASHBOARD ${RESET}"
-    echo "${CYAN}Hostname:${RESET} $(hostname) ${DIM}|${RESET} ${CYAN}OS:${RESET} $(uname -o) ${DIM}|${RESET} ${CYAN}Kernel:${RESET} $(uname -r)"
-    echo "${CYAN}Uptime:${RESET}   $(uptime -p)"
-    echo "${CYAN}Clock:${RESET}    $(date +'%H:%M:%S') ${DIM}|${RESET} ${CYAN}Load Avg:${RESET} $(get_load_avg)"
-    echo "${DIM}------------------------------------------------------------${RESET}"
+    echo -e "${BOLD}${WHITE}${BLUE} AKASHIC RECORDS DASHBOARD ${RESET}"
+    echo -e "${CYAN}Hostname:${RESET} $(hostname) ${DIM}|${RESET} ${CYAN}OS:${RESET} $(uname -o) ${DIM}|${RESET} ${CYAN}Kernel:${RESET} $(uname -r)"
+    echo -e "${CYAN}Uptime:${RESET}   $(uptime -p)"
+    echo -e "${CYAN}Clock:${RESET}    $(date +'%H:%M:%S') ${DIM}|${RESET} ${CYAN}Load Avg:${RESET} $(get_load_avg)"
+    echo -e "${DIM}------------------------------------------------------------${RESET}"
 
     # CPU
     cpu_usage=$(get_cpu_usage)
@@ -182,40 +182,45 @@ while true; do
     read rx_kb tx_kb <<< $(get_net_usage)
     tput cup 14 0
     printf "%-12s" "${BOLD}Network:${RESET}"
-    echo -n "RX: ${GREEN}${rx_kb} KB/s${RESET} ${DIM}|${RESET} TX: ${RED}${tx_kb} KB/s${RESET}      "
+    echo -en "RX: ${GREEN}${rx_kb} KB/s${RESET} ${DIM}|${RESET} TX: ${RED}${tx_kb} KB/s${RESET}      "
 
     # Battery
     bat_cap=$(get_battery_info)
     tput cup 16 0
     printf "%-12s" "${BOLD}Battery:${RESET}"
     if [ "$bat_cap" == "N/A" ]; then
-        echo -n "${DIM}N/A${RESET}"
+        echo -en "${DIM}N/A${RESET}"
     else
         # Color coding for battery
         if [ "$bat_cap" -gt 60 ]; then
-             echo -n "${GREEN}${bat_cap}%${RESET}"
+             echo -en "${GREEN}${bat_cap}%${RESET}"
         elif [ "$bat_cap" -gt 20 ]; then
-             echo -n "${YELLOW}${bat_cap}%${RESET}"
+             echo -en "${YELLOW}${bat_cap}%${RESET}"
         else
-             echo -n "${RED}${BOLD}${bat_cap}%${RESET}"
+             echo -en "${RED}${BOLD}${bat_cap}%${RESET}"
         fi
     fi
 
     # Top Processes
     tput cup 18 0
-    echo "${BOLD}Top Processes (CPU/MEM):${RESET}"
+    echo -e "${BOLD}Top Processes (CPU/MEM):${RESET}"
     tput cup 19 0
     get_top_processes | while read line; do
-        echo "  ${MAGENTA}${line}${RESET}"
+        echo -e "  ${MAGENTA}${line}${RESET}"
     done
 
     # Footer
     tput cup 25 0
-    echo "${DIM}------------------------------------------------------------${RESET}"
-    echo "Press ${BOLD}${RED}q${RESET} to quit."
+    echo -e "${DIM}------------------------------------------------------------${RESET}"
+    echo -e "Press ${BOLD}${RED}q${RESET} to quit."
 
     # Input handling
-    read -t 0.1 -n 1 key
+    local key
+    if [[ -n "$ZSH_VERSION" ]]; then
+        read -t 0.1 -k 1 key || true
+    else
+        read -t 0.1 -n 1 key || true
+    fi
     if [[ $key == "q" ]]; then
         cleanup
     fi

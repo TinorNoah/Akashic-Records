@@ -53,11 +53,19 @@ Transform your terminal into a productivity powerhouse.
 
 ### Installation
 
+**✨ The Fast Way (One-Command Installer):**
+Launch Akashic Records instantly without manual cloning. This will fetch the latest version and start the utility.
+
+```bash
+curl -sL https://raw.githubusercontent.com/TinorNoah/Akashic-Records/main/run.sh | bash
+```
+
+**🛠 The Manual Way:**
 Clone the archives to your local machine:
 
 ```bash
-git clone https://github.com/TinorNoah/akashic-records.git
-cd akashic-records
+git clone https://github.com/TinorNoah/Akashic-Records.git
+cd Akashic-Records
 chmod +x akashic_records.sh dashboard.sh
 ```
 
