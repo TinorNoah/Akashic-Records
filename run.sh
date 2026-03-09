@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Akashic Records One-Command Runner
-# Usage: curl -sL https://raw.githubusercontent.com/TinorNoah/Akashic-Records/main/run.sh | bash
+# Usage: curl -sL https://raw.githubusercontent.com/TinorNoah/Akashic-Records/master/run.sh | bash
 
 set -e
 

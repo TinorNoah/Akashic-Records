@@ -57,7 +57,7 @@ Transform your terminal into a productivity powerhouse.
 Launch Akashic Records instantly without manual cloning. This will fetch the latest version and start the utility.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/TinorNoah/Akashic-Records/main/run.sh | bash
+curl -sL https://raw.githubusercontent.com/TinorNoah/Akashic-Records/master/run.sh | bash
 ```
 
 **🛠 The Manual Way:**
